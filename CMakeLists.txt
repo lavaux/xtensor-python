@@ -52,12 +52,16 @@ endif()
 find_package(PythonInterp ${PythonLibsNew_FIND_VERSION} REQUIRED)
 
 set(pybind11_REQUIRED_VERSION 2.6.1)
-if(TARGET pybind11 OR TARGET pybind11::headers)
-    # pybind11 has a variable that indicates its version already, so use that
-    message(STATUS "Found pybind11 v${pybind11_VERSION}")
+if (NOT PYBIND11_FORCE_PATH)
+  if(TARGET pybind11 OR TARGET pybind11::headers)
+      # pybind11 has a variable that indicates its version already, so use that
+      message(STATUS "Found pybind11 v${pybind11_VERSION}")
+  else()
+      find_package(pybind11 ${pybind11_REQUIRED_VERSION} REQUIRED)
+      message(STATUS "Found pybind11: ${pybind11_INCLUDE_DIRS}/pybind11")
+  endif()
 else()
-    find_package(pybind11 ${pybind11_REQUIRED_VERSION} REQUIRED)
-    message(STATUS "Found pybind11: ${pybind11_INCLUDE_DIRS}/pybind11")
+  message(STATUS "Pybind11 path forced: INCLUDE ${pybind11_INCLUDE_DIRS}")
 endif()
 
 # Look for NumPy headers, except if NUMPY_INCLUDE_DIRS is passed,
