@@ -94,12 +94,14 @@ target_include_directories(xtensor-python INTERFACE
 target_link_libraries(xtensor-python INTERFACE xtensor)
 get_target_property(inc_dir xtensor-python INTERFACE_INCLUDE_DIRECTORIES)
 
-OPTION(BUILD_TESTS "xtensor test suite" OFF)
 OPTION(DOWNLOAD_GTEST "build gtest from downloaded sources" OFF)
 
+SET(DEFAULT_BUILD_TESTS OFF)
 if(DOWNLOAD_GTEST OR GTEST_SRC_DIR)
-    set(BUILD_TESTS ON)
+    set(DEFAULT_BUILD_TESTS ON)
 endif()
+
+OPTION(BUILD_TESTS "xtensor test suite" ${DEFAULT_BUILD_TESTS})
 
 if(BUILD_TESTS)
     if(MSVC)
